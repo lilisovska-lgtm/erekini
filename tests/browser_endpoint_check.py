@@ -1,0 +1,23 @@
+from playwright.sync_api import sync_playwright,expect
+with sync_playwright() as p:
+    browser=p.chromium.launch()
+    page=browser.new_page()
+    page.goto('http://127.0.0.1:8010/')
+    for who in ('supplier','buyer'):
+        reg=page.locator(f'[name="{who}.reg"]')
+        endpoint=page.locator(f'[name="{who}.endpoint"]')
+        scheme=page.locator(f'[name="{who}.scheme"]')
+        reg.fill('40000000001')
+        expect(endpoint).to_have_value('40000000001')
+        expect(scheme).to_have_value('0218')
+        reg.fill('40000000002')
+        expect(endpoint).to_have_value('40000000002')
+        reg.fill('')
+        expect(endpoint).to_have_value('')
+        reg.fill('40000000003')
+        expect(endpoint).to_have_value('40000000003')
+        endpoint.fill('40000000004')
+        reg.fill('40000000005')
+        expect(endpoint).to_have_value('40000000004')
+    browser.close()
+    print('Both parties: immediate fill, updated registration, blank clearing and manual override passed.')

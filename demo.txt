@@ -1,0 +1,26 @@
+DEMONSTRĀCIJAS RĒĶINS — IZDOMĀTI UZŅĒMUMI
+Rēķins Nr. DEMO-2026-001
+Rēķina datums: 2026-09-19
+Apmaksas termiņš: 2026-10-03
+Pircēja atsauce: DEMO-PASUTIJUMS-1
+
+Piegādātājs: SIA Parauga darbnīca
+Reģ. Nr.: 40000000001
+PVN Nr.: LV40000000001
+Adrese: Parauga iela 1
+Pilsēta: Rīga
+Pasta indekss: LV-1001
+Elektroniskā adrese: 40000000001
+
+Pircējs: SIA Demo klients
+Reģ. Nr.: 40000000002
+PVN Nr.: LV40000000002
+Adrese: Piemēra iela 2
+Pilsēta: Rīga
+Pasta indekss: LV-1002
+Elektroniskā adrese: 40000000002
+
+Nosaukums ; Daudzums ; Mērvienība ; Cena bez PVN ; PVN %
+Konsultācija ; 2 ; HUR ; 50.00 ; 21
+Dokumentu sagatavošana ; 1 ; C62 ; 25.00 ; 21
+Kopā apmaksai: 151.25 EUR

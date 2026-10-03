@@ -1,0 +1,52 @@
+{
+  "number": "DEMO-2026-001",
+  "issue": "2026-09-19",
+  "due": "2026-10-03",
+  "tax_date": "",
+  "reference": "DEMO-PASUTIJUMS-1",
+  "currency": "EUR",
+  "iban": "",
+  "supplier": {
+    "name": "SIA Parauga darbnīca",
+    "reg": "40000000001",
+    "vat": "LV40000000001",
+    "street": "Parauga iela 1",
+    "city": "Rīga",
+    "postal": "LV-1001",
+    "endpoint": "40000000001",
+    "scheme": "0218",
+    "country": "LV"
+  },
+  "buyer": {
+    "name": "SIA Demo klients",
+    "reg": "40000000002",
+    "vat": "LV40000000002",
+    "street": "Piemēra iela 2",
+    "city": "Rīga",
+    "postal": "LV-1002",
+    "endpoint": "40000000002",
+    "scheme": "0218",
+    "country": "LV"
+  },
+  "lines": [
+    {
+      "name": "Konsultācija",
+      "qty": "2",
+      "unit": "HUR",
+      "price": "50.00",
+      "rate": "21",
+      "category": "S"
+    },
+    {
+      "name": "Dokumentu sagatavošana",
+      "qty": "1",
+      "unit": "C62",
+      "price": "25.00",
+      "rate": "21",
+      "category": "S"
+    }
+  ],
+  "source_total": "151.25",
+  "exemption": "",
+  "confirmed": false
+}

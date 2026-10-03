@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="lv">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rēķinu darbnīca — PDF uz e-rēķinu</title><link rel="stylesheet" href="static/style.css"><script src="static/app.js" defer></script></head>
+<body>
+<header class="wrap"><a class="brand" href="./"><span class="mark">R</span> Rēķinu darbnīca</a><span class="badge">MI atpazīšana · XML pārbaude serverī</span></header>
+<main class="wrap">
+<div class="hero"><div class="eyebrow">NO DOKUMENTA LĪDZ E-RĒĶINAM</div><h1>Mazāk pārrakstīšanas.<br><span>Vairāk skaidrības.</span></h1><p>Augšupielādē rēķinu, pārskati tā datus un lejupielādē pārbaudītu XML failu nosūtīšanai klientam.</p></div>
+<div id="transport" class="notice" hidden>Pašlaik savienojums ir HTTP. Izmanto tikai parauga vai anonimizētus dokumentus; īstiem rēķiniem vispirms jāpieslēdz HTTPS.</div>
+<div class="steps"><span><b>1</b> Ielādē</span><span><b>2</b> Pārskati un izlabo</span><span><b>3</b> Lejupielādē XML</span></div>
+<section class="panel">
+<div class="eyebrow">ATPAZĪŠANAS REŽĪMS</div><h2>MI palīdz nolasīt rēķinu</h2>
+<div class="fields"><label>Izvēlies apstrādi<select id="mode"><option value="ai">OpenAI — nepieciešama API atslēga serverī</option><option value="local">Lokāla atpazīšana — bez ārēja MI</option></select></label>
+<label id="password-label">Rīka piekļuves parole<input id="access-password" type="password" autocomplete="off" maxlength="128"><small>Šī nav OpenAI API atslēga. API atslēgu glabā tikai serverī.</small></label></div>
+<p id="ai-status" role="status">Pārbaudu MI konfigurāciju…</p>
+<p id="ai-privacy" class="small">MI režīmā PDF vai attēls tiek nosūtīts OpenAI; DOCX un TXT gadījumā tiek nosūtīts nolasītais teksts. Pakalpojums ir maksas. Rezultāts ir jāpārskata. XML izveide un summu pārbaudes notiek šeit.</p>
+</section>
+<section class="panel">
+<h2>Automātiskā aizpildīšana</h2>
+<p class="small">Aizpilda tikai tukšos laukus. Dokumentā esošie dati ir prioritāri. Noklusējumus norādi atbilstoši vienošanās nosacījumiem ar klientu.</p>
+<p>Latvijas elektroniskā adrese automātiski aizpildās no 11 ciparu reģistrācijas numura ar shēmu 0218. Manuāli norādīta cita adrese tiek saglabāta. Tas nepārbauda uzņēmuma reģistrāciju Peppol tīklā.</p>
+<div class="fields">
+<label>Apmaksas termiņš, ja dokumentā nav<input id="default-days" type="number" min="0" max="365" step="1" placeholder="Kalendārās dienas, piem., 14"><small>No rēķina datuma; tukšs = neizmantot noklusējumu.</small></label>
+<label>Pircēja reģ. nr. noklusētajai atsaucei<input id="default-buyer" maxlength="11" inputmode="numeric"></label>
+<label>Ar šo pircēju saskaņotā atsauce<input id="default-reference" maxlength="200"><small>Izmanto tikai norādītajam pircējam; rēķina numurs netiek izmantots atsauces vietā.</small></label>
+<label>Mērvienība, ja dokumentā nav<select id="default-unit"><option value="">Jānorāda manuāli</option><option value="C62">gab.</option><option value="HUR">stundas</option><option value="DAY">dienas</option><option value="MON">mēneši</option><option value="KGM">kg</option><option value="MTR">metri</option></select></label>
+</div><p><button id="complete-fields" class="secondary" type="button">Aizpildīt trūkstošos laukus</button> <button id="save-defaults" class="secondary" type="button">Saglabāt iestatījumus šajā pārlūkā</button> <button id="clear-defaults" class="link" type="button">Dzēst saglabātos iestatījumus</button></p>
+<p id="defaults-status" class="small" role="status"></p><div id="completion-report" class="notice" hidden></div>
+</section>
+<section class="panel upload"><div><div class="eyebrow">01 / DOKUMENTS</div><h2>Sāc ar savu rēķinu</h2><p>UBL XML, PDF, skenēts PDF, PNG, JPG, DOCX vai TXT. Līdz 10 MB un 10 PDF lapām. Teksta atpazīšana latviešu un angļu valodā.</p><p class="small">Lokālajā režīmā saturs paliek serverī; MI režīmā tas tiek nosūtīts OpenAI. Šis rīks rēķinu vēsturi neglabā un dzēš savus apstrādes pagaidu failus.</p></div><div class="upload-actions"><label class="file-label" for="file">Izvēlies dokumentu</label><input id="file" type="file" accept=".xml,.pdf,.png,.jpg,.jpeg,.docx,.txt"><p id="filename" class="small">Dokuments vēl nav izvēlēts.</p><button id="demo" class="secondary" type="button">Izmēģini ar paraugu</button><a class="small" href="demo.txt" download>Lejupielādēt parauga dokumentu</a></div></section>
+<div id="status" role="status" aria-live="polite"></div>
+<div id="errors" class="notice error" role="alert" hidden></div>
+<div id="notes" class="notice" hidden></div>
+<div id="blockers" class="notice error" role="alert" hidden></div>
+<details class="source"><summary>Nolasītais oriģināla teksts</summary><pre id="source">Pēc augšupielādes šeit būs dokumenta teksts, ko salīdzināt ar formas datiem.</pre></details>
+<form id="invoice-form" novalidate><input type="hidden" name="invoice_type" value="380"><label>Rēķina piezīme<input name="note" maxlength="500"></label><label>Līguma atsauce<input name="contract_reference" maxlength="500"></label>
+<section class="panel"><div class="eyebrow">02 / PĀRSKATĪŠANA</div><h2>Rēķina dati</h2><p class="small">Šī versija: parasti EUR rēķini starp Latvijas uzņēmumiem. Bez avansiem, atlaidēm, papildmaksām un kredītrēķiniem. Neatpazītās vērtības aizpildi no oriģināla.</p><div class="fields">
+<label>Rēķina numurs<input name="number" required maxlength="35" autocomplete="off"></label>
+<label>Izrakstīšanas datums<input name="issue" type="date" required></label>
+<label>Apmaksas termiņš<input name="due" type="date" required></label>
+<label>Valūta<select name="currency"><option>EUR</option></select></label>
+<label>Pircēja atsauce (nav obligāta, ja ir pasūtījuma numurs)<input name="reference" maxlength="200"><small>Klienta norādītā atsauce. Melnrakstā var palikt tukša.</small></label>
+<label>Pasūtījuma numurs<input name="order_reference" maxlength="200"><small>Peppol e-rēķinam jānorāda vismaz viens: pircēja atsauce vai pasūtījuma numurs.</small></label>
+<label>PVN datums (ja atšķiras)<input name="tax_date" type="date"></label>
+<label>Pārdevēja IBAN (ja norādīts)<input name="iban" maxlength="60" placeholder="LV…" autocomplete="off" aria-describedby="iban-help"><small id="iban-help">Salīdzini ar konta numuru oriģinālajā rēķinā. Atstarpes un mazie burti netraucē. Ja konts norādīts kļūdaini, izlabo to; ja rēķinā konta nav, lauku vari atstāt tukšu.</small></label>
+</div></section>
+<div class="parties"><section class="panel"><h2>Pārdevējs</h2><p class="small">Rēķina izrakstītāja rekvizīti.</p><div id="supplier" class="fields party-fields"></div></section><section class="panel"><h2>Pircējs</h2><p class="small">Klienta rekvizīti.</p><div id="buyer" class="fields party-fields"></div></section></div>
+<section class="panel"><h2>Preces un pakalpojumi</h2><p class="small">Vienības cena bez PVN. S — ar PVN; Z — 0% likme; E — atbrīvots no PVN; O — PVN nepiemēro. Kategoriju izvēlies pēc oriģināla un darījuma būtības.</p><button id="non-vat" type="button" class="secondary">Pārdevējs nav PVN maksātājs — PVN nepiemēro visam rēķinam</button><p class="small">Šī izvēle atbilstoši paraugam iestata kategoriju E, PVN aprēķinā 0 un aizpilda tukšu pamatojumu. Pārdevēja reģistrācijas numurs tiek izmantots kā nodokļu identifikators, nevis PVN numurs. Izmanto, ja tas atbilst oriģinālajam rēķinam. Tā nav kategorija Z (0% PVN likme).</p><div id="lines"></div><button id="add-line" class="secondary" type="button">+ Pievienot pozīciju</button><div class="fields extra"><label>PVN nepiemērošanas / atbrīvojuma pamatojums<input name="exemption" maxlength="500"><small>Obligāts kategorijai E vai O.</small></label><label>Apmaksas summa oriģinālajā rēķinā, EUR<input name="source_total" inputmode="decimal" required placeholder="0.00"><small>Eksports tiek bloķēts, ja summa nesakrīt ar pozīciju aprēķinu.</small></label></div></section>
+<section class="panel export"><div class="eyebrow">03 / E-RĒĶINS</div><h2>Pārbaudi un lejupielādē</h2><p>Fails tiks pārbaudīts lokāli pret UBL 2.1 struktūru, EN 16931 un Peppol BIS Billing 3.0 noteikumiem. Pārbaude neapstiprina uzņēmumu reģistrāciju vai klienta sasniedzamību Peppol tīklā.</p><label class="check"><input id="confirmed" type="checkbox" required><span>Salīdzināju visus laukus, pozīcijas, PVN un summas ar oriģinālu. Šis ir parasts rēķins bez atlaidēm, avansiem, papildmaksām vai iepriekš veiktas samaksas.</span></label><button id="export" type="submit">Pārbaudīt un lejupielādēt XML ↓</button><button id="draft-export" type="button">Saglabāt XML melnrakstu ar tukšiem laukiem ↓</button><p class="small">Melnraksts ir rīka datu XML, nevis validēts UBL e-rēķins. Nezināmās vērtības paliek tukšas. Gatava e-rēķina lejupielādei obligātie dati jāpapildina.</p><p class="small">Nosūtīšanu klientam veic pats. Rīks nesūta dokumentus klientam, VID vai Peppol tīklā.</p></section>
+</form>
+<section class="panel"><h2>Oficiālie XML paraugi</h2><p class="small">Lejupielādēti no VDAA e-rēķinu sadaļā norādītajām Latvija.gov.lv paraugu saitēm. Paraugs ilustrē struktūru; tas neaizstāj aktuālo noteikumu pārbaudi. Kredītrēķinu un avansu eksports šajā rīkā vēl nav atbalstīts.</p><a href="examples/einvoice_shema_nePVN2.xml" download>E-rēķina XML paraugs</a> · <a href="examples/creditnote_shema_PVN1.xml" download>Kredītpaziņojuma XML paraugs</a> · <a href="https://www.vdaa.gov.lv/lv/e-rekini" target="_blank" rel="noopener noreferrer">Oficiālais avots</a></section>
+<footer><span>Rēķinu darbnīca · Pirmā versija</span><button class="link" id="reset" type="button">Notīrīt visus datus</button></footer>
+</main>
+</body></html>

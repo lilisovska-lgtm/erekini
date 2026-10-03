@@ -1,0 +1,12 @@
+{
+  "einvoice_shema_nePVN2.xml": {
+    "sha256": "d56fb6615b2342071536c0821f4449aebd7b78dc6edb1a03aed5f936ce70fef6",
+    "validation_errors": [],
+    "validation_warnings": []
+  },
+  "creditnote_shema_PVN1.xml": {
+    "sha256": "a67165c00beaf586ee06c164253f66064310738ed6d0eab8fd1612c20921c56b",
+    "validation_errors": [],
+    "validation_warnings": []
+  }
+}
